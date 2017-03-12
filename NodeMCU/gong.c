@@ -2,6 +2,12 @@
 
 const char* ssid = "ssid";
 const char* password = "password";
+const boolean dhcp = false; // ture for DHCP , False for static config.
+
+// Static network config, only relevant if dhcp=false
+const IPAddress ip(192, 168, 1, 2);
+const IPAddress gateway(192, 168, 1, 1);
+const IPAddress subnet(255, 255, 255, 0);
 
 int Pin = 13; // GPIO13
 WiFiServer server(80);
@@ -19,6 +25,14 @@ void setup() {
   Serial.print("Connecting to ");
   Serial.println(ssid);
 
+  if (dhcp) {
+    Serial.println("With DHCP");
+  }else{
+    Serial.print("With Static IP: ");
+    Serial.println(ip);
+    WiFi.config(ip, gateway, subnet);
+  }
+  
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {
@@ -52,7 +66,7 @@ void loop() {
   // Wait until the client sends some data
   Serial.println("new client");
   while(!client.available()){
-    digitalWrite(Pin, LOW); // To Prevent odd Triggers overtime, it somehow works ;)
+    digitalWrite(Pin, LOW); // To Prevent odd Triggers overtime, it somehow works ;
     delay(1);
   }
 
@@ -75,5 +89,5 @@ void loop() {
   delay(1);
   Serial.println("Request Finished");
   Serial.println("");
-
+  
 }
