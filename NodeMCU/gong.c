@@ -13,6 +13,7 @@ int Pin = 13; // GPIO13
 WiFiServer server(80);
 
 void setup() {
+  
   Serial.begin(115200);
   delay(10);
 
@@ -33,6 +34,7 @@ void setup() {
     WiFi.config(ip, gateway, subnet);
   }
   
+  WiFi.hostname("Gong");
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {
