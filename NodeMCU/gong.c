@@ -12,7 +12,13 @@ const IPAddress subnet(255, 255, 255, 0);
 int Pin = 13; // GPIO13
 WiFiServer server(80);
 
+int count = 0;
+  
 void setup() {
+  
+  WiFi.hostname("Gong");
+  WiFi.mode(WIFI_STA);
+  WiFi.softAPdisconnect(true);
   
   Serial.begin(115200);
   delay(10);
@@ -34,7 +40,6 @@ void setup() {
     WiFi.config(ip, gateway, subnet);
   }
   
-  WiFi.hostname("Gong");
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {
@@ -57,19 +62,28 @@ void setup() {
 }
 
 void loop() {
-  // Check if a client has connected
+
   WiFiClient client = server.available();
+
   if (!client) {
-    digitalWrite(Pin, LOW); // To Prevent odd Triggers overtime, it somehow works ;)
-    delay(1);
+    // Check if a client has connected
+    digitalWrite(Pin, LOW);
+    delay(10);
     return;
   }
 
   // Wait until the client sends some data
   Serial.println("new client");
   while(!client.available()){
-    digitalWrite(Pin, LOW); // To Prevent odd Triggers overtime, it somehow works ;
-    delay(1);
+    digitalWrite(Pin, LOW);
+    delay(10);
+    count++;
+    if(count>100)
+    {
+      Serial.println("client timeout");
+      count=0;
+      return;
+    }
   }
 
   String request = client.readStringUntil('\r');
