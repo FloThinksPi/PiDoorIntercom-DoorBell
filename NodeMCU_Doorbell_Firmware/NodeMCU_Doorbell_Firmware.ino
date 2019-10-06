@@ -1,11 +1,11 @@
 #include <ESP8266WiFi.h>
 
 const char* ssid = "ssid";
-const char* password = "password";
+const char* password = "pw";
 const boolean dhcp = false; // ture for DHCP , False for static config.
 
 // Static network config, only relevant if dhcp=false
-const IPAddress ip(192, 168, 1, 2);
+const IPAddress ip(192, 168, 1, 5);
 const IPAddress gateway(192, 168, 1, 1);
 const IPAddress subnet(255, 255, 255, 0);
 
@@ -15,16 +15,16 @@ WiFiServer server(80);
 int count = 0;
   
 void setup() {
+
+  pinMode(Pin, OUTPUT);
+  digitalWrite(Pin, LOW);
   
-  WiFi.hostname("Gong");
+  WiFi.hostname("PiDoorIntercomGong");
   WiFi.mode(WIFI_STA);
   WiFi.softAPdisconnect(true);
   
   Serial.begin(115200);
   delay(10);
-
-  pinMode(Pin, OUTPUT);
-  digitalWrite(Pin, LOW);
 
   // Connect to WiFi network
   Serial.println();
